@@ -64,7 +64,12 @@ class Teamup extends Component
             'headers' => [
                 'Teamup-Token' => $this->settings->apiToken,
             ],
-        ])->get($this->settings->calendarKey.'/events');
+        ])->get($this->settings->calendarKey.'/events', [
+            'query' => [
+                'startDate' => 'today',
+                'endDate' => 'today+1year',
+            ],
+        ]);
 
         $response = Json::decode((string) $request->getBody());
 
