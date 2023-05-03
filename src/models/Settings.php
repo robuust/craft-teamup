@@ -17,7 +17,7 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $apiKey;
+    public $apiToken;
 
     /**
      * @var string
@@ -37,20 +37,40 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $imageField;
+    public $locationField;
 
     /**
      * @var string
      */
-    public $textField;
+    public $startDateTimeField;
+
+    /**
+     * @var string
+     */
+    public $endDateTimeField;
+
+    /**
+     * @var string
+     */
+    public $unitField;
+
+    /**
+     * @var string
+     */
+    public $descriptionField;
+
+    /**
+     * @var string
+     */
+    public $attachmentsField;
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            [['calendarKey', 'apiKey', 'sectionHandle', 'entryTypeHandle', 'eventIdField', 'imageField', 'textField'], 'required'],
+            [['calendarKey', 'apiToken', 'sectionHandle', 'entryTypeHandle', 'eventIdField', 'locationField', 'startDateTimeField', 'endDateTimeField', 'unitField', 'descriptionField', 'attachmentsField'], 'required'],
         ];
     }
 }

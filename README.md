@@ -31,14 +31,18 @@ Create a file called `teamup.php` in you Craft config folder with the following 
 return [
     // General
     'calendarKey' => '', // YOUR CALENDAR KEY
-    'apiKey' => '', // YOUR API KEY
+    'apiToken' => '', // YOUR API TOKEN
     // Section
     'sectionHandle' => 'YOUR_EVENT_SECTION_HANDLE',
     'entryTypeHandle' => 'YOUR_EVENT_ENTRY_TYPE_HANDLE',
     // Fields
     'eventIdField' => 'YOUR_EVENT_ID_FIELD', // PlainText
-    'imageField' => 'YOUR_EVENT_IMAGE_FIELD', // Asset
-    'textField' => 'YOUR_EVENT_TEXT_FIELD', // Redactor
+    'locationField' => 'YOUR_EVENT_LOCATION_FIELD', // PlainText
+    'startDateTimeField' => 'YOUR_EVENT_START_DATETIME_FIELD', // DateTime
+    'endDateTimeField' => 'YOUR_EVENT_END_DATETIME_FIELD', // DateTime
+    'unitField' => 'YOUR_EVENT_UNIT_FIELD', // PlainText
+    'descriptionField' => 'YOUR_EVENT_DESCRIPTION_FIELD', // Redactor
+    'attachmentsField' => 'YOUR_EVENT_ATTACHMENTS_FIELD', // Assets
 ];
 
 ```

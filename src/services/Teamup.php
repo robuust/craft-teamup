@@ -17,7 +17,7 @@ class Teamup extends Component
     /**
      * @var string
      */
-    const URL = 'https://api.teamup.com';
+    public const URL = 'https://api.teamup.com';
 
     /**
      * @var Settings
@@ -60,13 +60,15 @@ class Teamup extends Component
     {
         // Get events
         $request = Craft::createGuzzleClient([
-            'baseUrl' => static::URL,
+            'base_uri' => static::URL,
             'headers' => [
                 'Teamup-Token' => $this->settings->apiToken,
             ],
         ])->get($this->settings->calendarKey.'/events');
 
-        return Json::decode((string) $request->getBody());
+        $response = Json::decode((string) $request->getBody());
+
+        return $response['events'];
     }
 
     /**
@@ -93,22 +95,24 @@ class Teamup extends Component
      */
     public function importEvent(array $event): bool
     {
-        $entry = $this->getEntry($event['ID']);
+        $entry = $this->getEntry($event['id']);
 
         if (!$entry) {
-            $image = base64_encode(file_get_contents($event['Newsevent']['ImageUrl']));
-
             $entry = new Entry();
             $entry->sectionId = $this->section->id;
             $entry->typeId = $this->entryType->id;
             $entry->enabled = true;
-            $entry->title = $event['Title'];
-            $entry->postDate = new DateTime($event['Date']);
+            $entry->title = $event['title'];
             $entry->setFieldValues([
-                $this->settings->eventIdField => $event['ID'],
-                $this->settings->imageField => ['data' => ['data:image/jpeg;base64,'.$image], 'filename' => [$event['ID'].'.jpg']],
-                $this->settings->textField => $event['Newsevent']['PublicText'],
+                $this->settings->eventIdField => $event['id'],
+                $this->settings->locationField => $event['location'],
+                $this->settings->startDateTimeField => new DateTime($event['start_dt']),
+                $this->settings->endDateTimeField => new DateTime($event['end_dt']),
+                $this->settings->unitField => $event['who'],
+                $this->settings->descriptionField => $event['notes'],
             ]);
+
+            // @TODO attachments
 
             return Craft::$app->getElements()->saveElement($entry);
         }
