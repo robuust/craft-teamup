@@ -88,7 +88,7 @@ class Teamup extends Component
         $query = Entry::find()->section($this->section);
         $query[$this->settings->eventIdField] = $eventId;
 
-        return $query->anyStatus()->one();
+        return $query->status(null)->one();
     }
 
     /**
