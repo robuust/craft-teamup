@@ -3,9 +3,13 @@
 namespace robuust\teamup\services;
 
 use Craft;
+use craft\elements\Asset;
 use craft\elements\Entry;
+use craft\helpers\Assets as AssetsHelper;
+use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use DateTime;
+use Exception;
 use robuust\teamup\Plugin;
 use yii\base\Component;
 
@@ -115,13 +119,61 @@ class Teamup extends Component
                 $this->settings->endDateTimeField => new DateTime($event['end_dt']),
                 $this->settings->unitField => $event['who'],
                 $this->settings->descriptionField => $event['notes'],
+                $this->settings->attachmentsField => $this->getAttachments($event['attachments']),
             ]);
-
-            // @TODO attachments
 
             return Craft::$app->getElements()->saveElement($entry);
         }
 
         return false;
+    }
+
+    /**
+     * Get attachments.
+     *
+     * @param array $attachments
+     *
+     * @return array
+     */
+    public function getAttachments(array $attachments): array
+    {
+        $ids = [];
+
+        foreach ($attachments as $attachment) {
+            $content = @file_get_contents($attachment['link']);
+            if ($content) {
+                // Temporarily save file to disk
+                $tempPath = AssetsHelper::tempFilePath($attachment['name']);
+                try {
+                    FileHelper::writeToFile($tempPath, $content);
+                } catch (Exception $e) {
+                    Craft::warning(sprintf('Error writing asset for %s. Message: %s', $attachment['name'], $e->getMessage()));
+                }
+
+                // Get upload folder
+                $field = Craft::$app->getFields()->getFieldByHandle($this->settings->attachmentsField);
+                $uploadFolderId = $field->resolveDynamicPathToFolderId();
+                $uploadFolder = Craft::$app->getAssets()->getFolderById($uploadFolderId);
+
+                // Create new asset
+                $asset = new Asset();
+                $asset->tempFilePath = $tempPath;
+                $asset->setFilename($attachment['name']);
+                $asset->newFolderId = $uploadFolderId;
+                $asset->setVolumeId($uploadFolder->volumeId);
+                $asset->avoidFilenameConflicts = true;
+                $asset->setScenario(Asset::SCENARIO_CREATE);
+
+                try {
+                    if (Craft::$app->getElements()->saveElement($asset)) {
+                        $ids[] = $asset->id;
+                    }
+                } catch (Exception $e) {
+                    // do nothing
+                }
+            }
+        }
+
+        return $ids;
     }
 }
