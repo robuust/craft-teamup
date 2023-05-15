@@ -12,11 +12,6 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $calendarKey;
-
-    /**
-     * @var string
-     */
     public $apiToken;
 
     /**
@@ -70,7 +65,7 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['calendarKey', 'apiToken', 'sectionHandle', 'entryTypeHandle', 'eventIdField', 'locationField', 'startDateTimeField', 'endDateTimeField', 'unitField', 'descriptionField', 'attachmentsField'], 'required'],
+            [['apiToken', 'sectionHandle', 'entryTypeHandle', 'eventIdField', 'locationField', 'startDateTimeField', 'endDateTimeField', 'unitField', 'descriptionField', 'attachmentsField'], 'required'],
         ];
     }
 }

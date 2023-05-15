@@ -58,9 +58,11 @@ class Teamup extends Component
     /**
      * Get teamup events.
      *
+     * @param string $calendarKey
+     *
      * @return array
      */
-    public function getEvents(): array
+    public function getEvents(string $calendarKey): array
     {
         // Get events
         $request = Craft::createGuzzleClient([
@@ -68,7 +70,7 @@ class Teamup extends Component
             'headers' => [
                 'Teamup-Token' => $this->settings->apiToken,
             ],
-        ])->get($this->settings->calendarKey.'/events', [
+        ])->get($calendarKey.'/events', [
             'query' => [
                 'startDate' => 'today',
                 'endDate' => 'today+1year',

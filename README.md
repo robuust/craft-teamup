@@ -30,7 +30,6 @@ Create a file called `teamup.php` in you Craft config folder with the following 
 
 return [
     // General
-    'calendarKey' => '', // YOUR CALENDAR KEY
     'apiToken' => '', // YOUR API TOKEN
     // Section
     'sectionHandle' => 'YOUR_EVENT_SECTION_HANDLE',
