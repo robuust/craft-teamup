@@ -48,4 +48,4 @@ return [
 
 ## Usage
 
-Run `craft teamup/import` on the CLI to import the newest items.
+Run `craft teamup/import YOUR_CALENDAR_KEY` on the CLI to import the newest items.
