@@ -113,21 +113,20 @@ class Teamup extends Component
             $entry->sectionId = $this->section->id;
             $entry->typeId = $this->entryType->id;
             $entry->enabled = true;
-            $entry->title = $event['title'];
-            $entry->setFieldValues([
-                $this->settings->eventIdField => $event['id'],
-                $this->settings->locationField => $event['location'],
-                $this->settings->startDateTimeField => new DateTime($event['start_dt']),
-                $this->settings->endDateTimeField => new DateTime($event['end_dt']),
-                $this->settings->unitField => $event['who'],
-                $this->settings->descriptionField => $event['notes'],
-                $this->settings->attachmentsField => $this->getAttachments($event['attachments']),
-            ]);
-
-            return Craft::$app->getElements()->saveElement($entry);
+            $entry->setFieldValue($this->settings->eventIdField, $event['id']);
         }
 
-        return false;
+        $entry->title = $event['title'];
+        $entry->setFieldValues([
+            $this->settings->locationField => $event['location'],
+            $this->settings->startDateTimeField => new DateTime($event['start_dt']),
+            $this->settings->endDateTimeField => new DateTime($event['end_dt']),
+            $this->settings->unitField => $event['who'],
+            $this->settings->descriptionField => $event['notes'],
+            $this->settings->attachmentsField => $this->getAttachments($event['attachments']),
+        ]);
+
+        return Craft::$app->getElements()->saveElement($entry);
     }
 
     /**
