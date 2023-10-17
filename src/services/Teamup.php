@@ -98,6 +98,19 @@ class Teamup extends Component
     }
 
     /**
+     * Get all entries.
+     *
+     * @return array
+     */
+    public function getEntries(): array
+    {
+        $query = Entry::find()->section($this->section);
+        $query->orderBy($this->settings->startDateTimeField.' asc');
+
+        return $query->status(null)->all();
+    }
+
+    /**
      * Import event.
      *
      * @param array $event
@@ -174,5 +187,22 @@ class Teamup extends Component
         }
 
         return $ids;
+    }
+
+    /**
+     * Clean up event.
+     *
+     * @param Entry $entry
+     * @param array $events
+     */
+    public function cleanupEvent(Entry $entry, array $events): bool
+    {
+        foreach ($events as $event) {
+            if ($event['id'] == $entry->{$this->settings->eventIdField}) {
+                return false;
+            }
+        }
+
+        return Craft::$app->getElements()->deleteElement($entry);
     }
 }

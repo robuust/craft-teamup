@@ -49,3 +49,5 @@ return [
 ## Usage
 
 Run `craft teamup/import YOUR_CALENDAR_KEY` on the CLI to import the newest items.
+
+Run `craft teamup/import/cleanup YOUR_CALENDAR_KEY` on the CLI to clean up old items.

@@ -33,4 +33,31 @@ class ImportController extends Controller
 
         return ExitCode::OK;
     }
+
+    /**
+     * Cleanup action.
+     *
+     * @param string $calendarKey
+     *
+     * @return int
+     */
+    public function actionCleanup(string $calendarKey): int
+    {
+        $events = $this->module->teamup->getEvents($calendarKey);
+        $this->stdout('events found: '.count($events)."\n");
+
+        $entries = $this->module->teamup->getEntries();
+        $this->stdout('entries found: '.count($entries)."\n");
+
+        // Cleanup events
+        $count = 0;
+        foreach ($entries as $entry) {
+            if ($this->module->teamup->cleanupEvent($entry, $events)) {
+                ++$count;
+            }
+        }
+        $this->stdout("entries cleaned up: {$count}\n");
+
+        return ExitCode::OK;
+    }
 }

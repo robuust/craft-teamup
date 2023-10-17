@@ -1,3 +1,7 @@
+## 1.1.0 - 2023-10-17
+### Added
+- Added ability to clean up events that are no longer in the feed.
+
 ## 1.0.2 - 2023-06-21
 ### Changed
 - Use the field's setter instead of using setFieldValue() directly, so attributes are also supported.
