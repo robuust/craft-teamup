@@ -37,13 +37,16 @@ class ImportController extends Controller
     /**
      * Cleanup action.
      *
-     * @param string $calendarKey
+     * @param array $calendarKeys
      *
      * @return int
      */
-    public function actionCleanup(string $calendarKey): int
+    public function actionCleanup(array $calendarKeys): int
     {
-        $events = $this->module->teamup->getEvents($calendarKey);
+        $events = [];
+        foreach ($calendarKeys as $calendarKey) {
+            $events = array_merge($events, $this->module->teamup->getEvents($calendarKey));
+        }
         $this->stdout('events found: '.count($events)."\n");
 
         $entries = $this->module->teamup->getEntries();

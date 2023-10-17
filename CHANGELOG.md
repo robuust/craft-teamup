@@ -1,3 +1,7 @@
+## 1.1.1 - 2023-10-17
+### Changed
+- Allow multiple calendars to be cleaned up at once.
+
 ## 1.1.0 - 2023-10-17
 ### Added
 - Added ability to clean up events that are no longer in the feed.
