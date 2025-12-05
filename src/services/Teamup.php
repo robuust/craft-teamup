@@ -5,11 +5,15 @@ namespace robuust\teamup\services;
 use Craft;
 use craft\elements\Asset;
 use craft\elements\Entry;
+use craft\fields\Assets as AssetField;
 use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
+use craft\services\Entries;
+use craft\services\Fields;
 use DateTime;
 use Exception;
+use robuust\teamup\models\Settings;
 use robuust\teamup\Plugin;
 use yii\base\Component;
 
@@ -29,9 +33,9 @@ class Teamup extends Component
     protected $settings;
 
     /**
-     * @var Sections
+     * @var Entries
      */
-    protected $sections;
+    protected $entries;
 
     /**
      * @var Section
@@ -49,10 +53,10 @@ class Teamup extends Component
     public function init()
     {
         $this->settings = Plugin::getInstance()->getSettings();
-        $this->sections = Craft::$app->getSections();
+        $this->entries = Craft::$app->getEntries();
 
-        $this->section = $this->sections->getSectionByHandle($this->settings->sectionHandle);
-        list($this->entryType) = $this->sections->getEntryTypesByHandle($this->settings->entryTypeHandle);
+        $this->section = $this->entries->getSectionByHandle($this->settings->sectionHandle);
+        $this->entryType = $this->entries->getEntryTypeByHandle($this->settings->entryTypeHandle);
     }
 
     /**
@@ -163,7 +167,10 @@ class Teamup extends Component
                 }
 
                 // Get upload folder
-                $field = Craft::$app->getFields()->getFieldByHandle($this->settings->attachmentsField);
+                /** @var Fields $fields */
+                $fields = Craft::$app->getFields();
+                /** @var AssetField $field */
+                $field = $fields->getFieldByHandle($this->settings->attachmentsField);
                 $uploadFolderId = $field->resolveDynamicPathToFolderId();
                 $uploadFolder = Craft::$app->getAssets()->getFolderById($uploadFolderId);
 
